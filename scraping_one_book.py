@@ -49,7 +49,9 @@ def scrap_one_book():
 		universal_product_code = tds[0].text
 		price_excluding_tax = tds[2].text
 		price_including_tax = tds[3].text
-		number_available = tds[5].text[10:12] #select only the number TODO : modif avec regex ?
+		number_available_list = re.findall(r'\d', tds[5].text)
+		number_available = ''.join(number_available_list)
+		
 	try:
 		book_info = {'product_page_url': product_page_url,
 					'universal_product_code(upc)': universal_product_code,
