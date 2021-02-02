@@ -4,12 +4,17 @@ from bs4 import BeautifulSoup
 import urllib.parse
 import csv
 import re
+import os.path
 
 def save_info_in_csv(book_info):
-	with open(f'book.csv', 'a', encoding = 'utf-8-sig') as csvfile:
+	with open('book.csv', 'a', newline = '', encoding = 'utf-8-sig') as csvfile:
+		writer = csv.DictWriter(csvfile, book_info, dialect='excel', delimiter = ';')
+		writer.writerow(book_info)
+
+def save_header_in_csv(book_info):
+	with open('book.csv', 'a', newline = '', encoding = 'utf-8-sig') as csvfile:
 		writer = csv.DictWriter(csvfile, book_info, dialect='excel', delimiter = ';')
 		writer.writeheader()
-		writer.writerow(book_info)
 
 # set the url
 def set_the_url():
@@ -63,7 +68,11 @@ def scrap_one_book():
 					'category': category,
 					'review_rating': review_rating,
 					'image_url': image_url}
-		return save_info_in_csv(book_info)
+		if os.path.isfile('book.csv'):
+			return save_info_in_csv(book_info)
+		else:
+			save_header_in_csv(book_info)
+			save_info_in_csv(book_info)
 	except NameError:
 		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
 		scrap_one_book()
