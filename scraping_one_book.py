@@ -50,20 +50,20 @@ def scrap_one_book():
 		price_excluding_tax = tds[2].text
 		price_including_tax = tds[3].text
 		number_available = tds[5].text[10:12] #select only the number TODO : modif avec regex ?
+	try:
+		book_info = {'product_page_url': product_page_url,
+					'universal_product_code(upc)': universal_product_code,
+					'title': title,
+					'price_including_tax': price_including_tax,
+					'price_excluding_tax': price_excluding_tax,
+					'number_available': number_available,
+					'product_description': product_description,
+					'category': category,
+					'review_rating': review_rating,
+					'image_url': image_url}
+		return save_info_in_csv(book_info)
+	except NameError:
+		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
+		scrap_one_book()
 
-		return {'product_page_url': product_page_url,
-				'universal_product_code(upc)': universal_product_code,
-				'title': title,
-				'price_including_tax': price_including_tax,
-				'price_excluding_tax': price_excluding_tax,
-				'number_available': number_available,
-				'product_description': product_description,
-				'category': category,
-				'review_rating': review_rating,
-				'image_url': image_url}
-
-try:	
-	book_info = scrap_one_book()
-	save_info_in_csv(book_info)
-except NameError:
-	print("ERREUR : Le livre est introuvable, veuillez relancer le script en vérifiant l'URL.")
+scrap_one_book()
