@@ -6,7 +6,7 @@ import csv
 import re
 
 def save_info_in_csv(book_info):
-	with open(f'book.csv', 'w', encoding = 'utf-8-sig') as csvfile:
+	with open(f'book.csv', 'a', encoding = 'utf-8-sig') as csvfile:
 		writer = csv.DictWriter(csvfile, book_info, dialect='excel', delimiter = ';')
 		writer.writeheader()
 		writer.writerow(book_info)
