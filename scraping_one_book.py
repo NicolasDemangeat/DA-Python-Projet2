@@ -26,9 +26,10 @@ def set_the_url():
 		if result:		
 			the_url = input_url
 			regex_ok = True
+			return the_url
 		else:
 			print("L'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
-	return the_url
+	
 
 def scrap_one_book():
 	the_url = set_the_url()
@@ -76,5 +77,7 @@ def scrap_one_book():
 	except NameError:
 		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
 		scrap_one_book()
+		
+if __name__ == '__main__':
+	scrap_one_book()
 
-scrap_one_book()
