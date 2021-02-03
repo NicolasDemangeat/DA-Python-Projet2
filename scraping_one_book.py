@@ -31,12 +31,12 @@ def set_the_url():
 			print("L'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
 	
 
-def scrap_one_book():
+def scrap_one_book(urls = ''):
 	if __name__ == '__main__':
 		the_url = set_the_url()
 	else:
-		pass # TODO : trouver un moyen de choper les URL des livres, via une boucle ?
-	
+		the_url = urls
+		
 	# set the response resquests
 	response = requests.get(the_url)
 	# if OK, scrap the page
@@ -84,4 +84,3 @@ def scrap_one_book():
 
 if __name__ == '__main__':
 	scrap_one_book()
-
