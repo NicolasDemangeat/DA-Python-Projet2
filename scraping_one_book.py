@@ -32,17 +32,21 @@ def set_the_url():
 	
 
 def scrap_one_book():
-	the_url = set_the_url()
+	if __name__ == '__main__':
+		the_url = set_the_url()
+	else:
+		pass # TODO : trouver un moyen de choper les URL des livres, via une boucle ?
+	
 	# set the response resquests
 	response = requests.get(the_url)
 	# if OK, scrap the page
 	if response.ok:
+		soup = BeautifulSoup(response.content, 'html.parser')
 		product_page_url = the_url
-		soup = BeautifulSoup(response.content, 'html.parser')			
-		title = soup.h1.string	# scrap of title			
+		title = soup.h1.string	# scrap of title		
 		image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src']) # scrap of URL image			
 		category = soup.find('ul')('li')[2].text.strip() # scrap gategory			
-		all_p = soup.findAll('p') # find all paragraph			
+		all_p = soup.find_all('p') # find all paragraph			
 		product_description = all_p[3].text #in all paragraph, p[3] is the description
 		# find each paragraph in all paragraph
 		for p in all_p:
@@ -77,7 +81,7 @@ def scrap_one_book():
 	except NameError:
 		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
 		scrap_one_book()
-		
+
 if __name__ == '__main__':
 	scrap_one_book()
 
