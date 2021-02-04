@@ -20,15 +20,15 @@ def save_header_in_csv(book_info):
 def set_the_url():
 	regex_ok = False
 	while regex_ok == False: #try to set the url
-		input_url = input("Veuillez saisir l'URL du livre : ")
-		pattern = '^http://books[.]toscrape[.]com/catalogue/.+/index.html'
+		input_url = input("Veuillez saisir l'URL : ")
+		pattern = '^http://books[.]toscrape[.]com/'
 		result = re.match(pattern, input_url)
 		if result:		
 			the_url = input_url
 			regex_ok = True
 			return the_url
 		else:
-			print("L'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
+			print("L'URL n'est pas valide.")
 	
 
 def scrap_one_book(urls = ''):
@@ -79,7 +79,7 @@ def scrap_one_book(urls = ''):
 			save_header_in_csv(book_info)
 			save_info_in_csv(book_info)
 	except NameError:
-		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide, elle doit être de la forme http://books.toscrape.com/catalogue/{nom_du_livre}/index.html")
+		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide.")
 		scrap_one_book()
 
 if __name__ == '__main__':

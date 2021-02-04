@@ -7,8 +7,6 @@ import re
 import os.path
 import scraping_one_book
 
-url_category = 'http://books.toscrape.com/catalogue/category/books/travel_2/index.html'
-
 def scrap_one_category():
     response = requests.get(url_category)
 	# if OK, scrap the page
@@ -22,11 +20,17 @@ def scrap_one_category():
             links.append(link)
         return links
 
-links = scrap_one_category()
-for link in links:
-    url = urllib.parse.urljoin("http://books.toscrape.com/catalogue/", link[9:])
-    scraping_one_book.scrap_one_book(url)
+def scrap_all_books():
+    links = scrap_one_category()
+    try:
+        for link in links:
+            url = urllib.parse.urljoin("http://books.toscrape.com/catalogue/", link[9:])
+            scraping_one_book.scrap_one_book(url)
+    except:
+        print("L'URL n'est pas correct, veuillez relancer le script.")
 
-
+if __name__ == '__main__':
+    url_category = scraping_one_book.set_the_url()
+    scrap_all_books()
 
 
