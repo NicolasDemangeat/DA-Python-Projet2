@@ -23,8 +23,8 @@ def scrap_one_category():
 def scrap_all_books():
     links = scrap_one_category()
     try:
-        for link in links:
-            url = urllib.parse.urljoin("http://books.toscrape.com/catalogue/", link[9:])
+        for link in links:            
+            url = urllib.parse.urljoin("http://books.toscrape.com/catalogue/catalogue/catalogue/catalogue/", link)
             scraping_one_book.scrap_one_book(url)
     except:
         print("L'URL n'est pas correct, veuillez relancer le script.")
@@ -32,5 +32,3 @@ def scrap_all_books():
 if __name__ == '__main__':
     url_category = scraping_one_book.set_the_url()
     scrap_all_books()
-
-
