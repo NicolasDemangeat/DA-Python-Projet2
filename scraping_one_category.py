@@ -7,6 +7,18 @@ import re
 import os.path
 import scraping_one_book
 
+def find_next_page(url = ''):
+    reponse = requests.get(url_category)
+    if reponse.ok:
+        urls_next_page = []
+        soup = BeautifulSoup(reponse.content, 'html.parser')
+        if soup.find_all('ul', {"class": "pager"}):            
+            li_url = soup.find_all('li', {"class": "next"})
+            print(li_url)
+
+        else:
+            pass
+
 def scrap_one_category():
     response = requests.get(url_category)
 	# if OK, scrap the page
@@ -31,4 +43,5 @@ def scrap_all_books():
 
 if __name__ == '__main__':
     url_category = scraping_one_book.set_the_url()
-    scrap_all_books()
+    find_next_page()
+    #scrap_all_books()
