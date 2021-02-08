@@ -28,8 +28,7 @@ def set_the_url():
 			regex_ok = True
 			return the_url
 		else:
-			print("L'URL n'est pas valide.")
-	
+			print("L'URL n'est pas valide.")	
 
 def scrap_one_book(urls = ''):
 	if __name__ == '__main__':
