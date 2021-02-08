@@ -5,6 +5,7 @@ import urllib.parse
 import csv
 import re
 import os.path
+import pandas as pd
 
 def save_info_in_csv(book_info):
 	with open('book.csv', 'a', newline = '', encoding = 'utf-8-sig') as csvfile:
