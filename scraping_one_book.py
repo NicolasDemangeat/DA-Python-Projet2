@@ -7,16 +7,6 @@ import re
 import os.path
 import pandas as pd
 
-def save_info_in_csv(book_info):
-	with open('book.csv', 'a', newline = '', encoding = 'utf-8-sig') as csvfile:
-		writer = csv.DictWriter(csvfile, book_info, dialect='excel', delimiter = ';')
-		writer.writerow(book_info)
-
-def save_header_in_csv(book_info):
-	with open('book.csv', 'a', newline = '', encoding = 'utf-8-sig') as csvfile:
-		writer = csv.DictWriter(csvfile, book_info, dialect='excel', delimiter = ';')
-		writer.writeheader()
-
 # set the url
 def set_the_url():
 	regex_ok = False
@@ -63,24 +53,20 @@ def scrap_one_book(urls = ''):
 		number_available = ''.join(number_available_list)
 		
 	try:
-		book_info = {'product_page_url': product_page_url,
-					'universal_product_code(upc)': universal_product_code,
-					'title': title,
-					'price_including_tax': price_including_tax,
-					'price_excluding_tax': price_excluding_tax,
-					'number_available': number_available,
-					'product_description': product_description,
-					'category': category,
-					'review_rating': review_rating,
-					'image_url': image_url}
-		if os.path.isfile('book.csv'):
-			return save_info_in_csv(book_info)
-		else:
-			save_header_in_csv(book_info)
-			save_info_in_csv(book_info)
+		book_info = pd.DataFrame({'product_page_url': [product_page_url],
+					'universal_product_code(upc)': [universal_product_code],
+					'title': [title],
+					'price_including_tax': [price_including_tax],
+					'price_excluding_tax': [price_excluding_tax],
+					'number_available': [number_available],
+					'product_description': [product_description],
+					'category': [category],
+					'review_rating': [review_rating],
+					'image_url': [image_url]})
 	except NameError:
-		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide.")
-		scrap_one_book()
+		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide. Relancer le programme avec une URL valide.")
+	
+	return book_info
 
 if __name__ == '__main__':
-	scrap_one_book()
+	scrap_one_book().to_csv(path_or_buf='book.csv', sep=';', index=False)

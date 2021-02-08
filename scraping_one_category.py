@@ -6,6 +6,7 @@ import csv
 import re
 import os.path
 import scraping_one_book
+import pandas as pd
 
 def find_next_page(url = ''):
     reponse = requests.get(url_category)
@@ -16,9 +17,10 @@ def find_next_page(url = ''):
             li_url = soup.find_all('li', {"class": "next"})
             print(li_url)        
 
-def scrap_one_category(urls = ''):
+def scrap_one_category(urls = ''): #scrap all the urls' books in the category
     if __name__ == '__main__':
-        response = requests.get(url_category)
+        url_category = scraping_one_book.set_the_url()
+        response = requests.get(url_category) # url_category = url form set_the_url
     else:
         response = requests.get(urls)
 	# if OK, scrap the page
@@ -30,18 +32,20 @@ def scrap_one_category(urls = ''):
             a = one_title.find('a')
             link = a['href']
             links.append(link)
-        return links
+        return links #return a lists of urls
 
-def scrap_all_books():    
-    links = scrap_one_category()
+def scrap_all_books(): #scrap all books in the page
+    links = scrap_one_category() #link = a lists of urls
+    df_list = []
     try:
-        for link in links:            
+        for link in links:
             url = urllib.parse.urljoin("http://books.toscrape.com/catalogue/catalogue/catalogue/catalogue/", link)
-            scraping_one_book.scrap_one_book(url)
+            df_list.append(scraping_one_book.scrap_one_book(url))
+       
+        df_all_books = pd.concat(df_list)
+        return df_all_books
     except:
         print("L'URL n'est pas correct, veuillez relancer le script.")
 
 if __name__ == '__main__':
-    url_category = scraping_one_book.set_the_url()
-    #find_next_page()
-    scrap_all_books()
+    scrap_all_books().to_csv(path_or_buf='books.csv', sep=';', index=False)
