@@ -22,11 +22,11 @@ def scrap_one_category(urls = ''): #scrap all the urls' books in the category
         url_category = scraping_one_book.set_the_url()
         response = requests.get(url_category) # url_category = url form set_the_url
     else:
-        response = requests.get(urls)
+        response = requests.get(urls)  # ulrs parameter
 	# if OK, scrap the page
     if response.ok:
         soup = BeautifulSoup(response.content, 'html.parser')
-        links = []
+        links = [] # list with all urls books in the page
         all_title = soup.find_all('h3')
         for one_title in all_title:
             a = one_title.find('a')
@@ -45,7 +45,7 @@ def scrap_all_books(): #scrap all books in the page
         df_all_books = pd.concat(df_list)
         return df_all_books
     except:
-        print("L'URL n'est pas correct, veuillez relancer le script.")
+        print("L'URL n'est pas correct, veuillez relancer le programme.")
 
 if __name__ == '__main__':
     scrap_all_books().to_csv(path_or_buf='books.csv', sep=';', index=False)
