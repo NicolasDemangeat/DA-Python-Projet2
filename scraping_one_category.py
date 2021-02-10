@@ -24,21 +24,22 @@ def find_next_page(url = ''):
     return url_all_pages_list
 
 def scrap_one_category(urls = ''): #scrap all the urls' books in the category
+    links = [] # list with all urls books in the page
     if __name__ == '__main__':
         url_category = scraping_one_book.set_the_url()
-        response = requests.get(url_category) # url_category = url form set_the_url
+        urls_next_pages_list = find_next_page(url_category)        
     else:
-        response = requests.get(urls)  # ulrs parameter
-	# if OK, scrap the page
-    if response.ok:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        links = [] # list with all urls books in the page
+        urls_next_pages_list = find_next_page(urls)  # ulrs parameter
+	
+    for link in urls_next_pages_list:
+        reponse = requests.get(link)
+        soup = BeautifulSoup(reponse.content, 'html.parser')        
         all_title = soup.find_all('h3')
         for one_title in all_title:
             a = one_title.find('a')
             link = a['href']
             links.append(link)
-        return links #return a lists of urls
+    return links #return a lists of urls
 
 def scrap_all_books(): #scrap all books in the page
     links = scrap_one_category() #link = a lists of urls
@@ -54,5 +55,4 @@ def scrap_all_books(): #scrap all books in the page
         print("L'URL n'est pas correct, veuillez relancer le programme.")
 
 if __name__ == '__main__':
-    #scrap_all_books().to_csv(path_or_buf='books.csv', sep=';', index=False)
-    print(find_next_page('http://books.toscrape.com/catalogue/category/books/music_14/index.html'))
+    print(scrap_all_books())
