@@ -9,13 +9,19 @@ import scraping_one_book
 import pandas as pd
 
 def find_next_page(url = ''):
-    reponse = requests.get(url_category)
+    url_all_pages_list = []
+    test_url = url.replace("index", "page-1")
+    reponse = requests.get(test_url)
     if reponse.ok:
-        urls_next_page = []
-        soup = BeautifulSoup(reponse.content, 'html.parser')
-        if soup.find_all('ul', {"class": "pager"}):
-            li_url = soup.find_all('li', {"class": "next"})
-            print(li_url)        
+        for i in range(1, 9):
+            url_page = url.replace("index", "page-" + str(i))
+            reponse = requests.get(url_page)
+            if reponse.ok:
+                url_all_pages_list.append(url_page)
+    else:
+        url_all_pages_list.append(url)
+
+    return url_all_pages_list
 
 def scrap_one_category(urls = ''): #scrap all the urls' books in the category
     if __name__ == '__main__':
@@ -48,4 +54,5 @@ def scrap_all_books(): #scrap all books in the page
         print("L'URL n'est pas correct, veuillez relancer le programme.")
 
 if __name__ == '__main__':
-    scrap_all_books().to_csv(path_or_buf='books.csv', sep=';', index=False)
+    #scrap_all_books().to_csv(path_or_buf='books.csv', sep=';', index=False)
+    print(find_next_page('http://books.toscrape.com/catalogue/category/books/music_14/index.html'))
