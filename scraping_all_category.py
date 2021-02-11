@@ -7,6 +7,7 @@ import re
 import os.path
 import scraping_one_book
 import scraping_one_category
+import pandas as pd
 
 def scrap_the_site():
     link = 'http://books.toscrape.com/index.html'
@@ -21,6 +22,11 @@ def scrap_the_site():
         links.append('http://books.toscrape.com/' + link)
     return links
 
+df_result = []
 links = scrap_the_site()
 for link in links:
     url_category = scraping_one_category.scrap_one_category(link)
+    df_result.append(scraping_one_category.scrap_all_books(url_category))
+
+result = pd.concat(df_result)
+result.to_csv(path_or_buf='all_books.csv', sep=';', index=False)

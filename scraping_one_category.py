@@ -41,8 +41,11 @@ def scrap_one_category(urls = ''): #scrap all the urls' books in the category
             links.append(link)
     return links #return a lists of urls
 
-def scrap_all_books(): #scrap all books in the page
-    links = scrap_one_category() #link = a lists of urls
+def scrap_all_books(links_of_books = []): #scrap all books in the page
+    if __name__ == '__main__':
+        links = scrap_one_category() #link = a lists of urls
+    else:
+        links = links_of_books
     df_list = []
     try:
         for link in links:
