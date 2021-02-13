@@ -15,17 +15,17 @@ def set_the_url():
 		pattern = '^http://books[.]toscrape[.]com/'
 		result = re.match(pattern, input_url)
 		if result:		
-			the_url = input_url
+			the_url = input_url #a modifier
 			regex_ok = True
-			return the_url
+			return the_url # return input_url
 		else:
 			print("L'URL n'est pas valide.")	
 
-def scrap_one_book(urls = ''):
+def scrap_one_book(url = ''):
 	if __name__ == '__main__':
 		the_url = set_the_url()
 	else:
-		the_url = urls
+		the_url = url #a modifier
 		
 	# set the response resquests
 	response = requests.get(the_url)
@@ -33,7 +33,7 @@ def scrap_one_book(urls = ''):
 	if response.ok:
 		soup = BeautifulSoup(response.content, 'html.parser')
 		product_page_url = the_url
-		title = soup.h1.string	# scrap of title		
+		title = soup.h1.string	# scrap of title TODO expliqué diff
 		image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src']) # scrap of URL image			
 		category = soup.find('ul')('li')[2].text.strip() # scrap gategory			
 		all_p = soup.find_all('p') # find all paragraph			
@@ -49,20 +49,20 @@ def scrap_one_book(urls = ''):
 		universal_product_code = tds[0].text
 		price_excluding_tax = tds[2].text
 		price_including_tax = tds[3].text
-		number_available_list = re.findall(r'\d', tds[5].text)
-		number_available = ''.join(number_available_list)
+		number_available_list = re.findall(r'\d', tds[5].text) #make a list of number
+		number_available = ''.join(number_available_list) #join the number
 		
 	try:
 		book_info = pd.DataFrame({'product_page_url': [product_page_url],
-					'universal_product_code(upc)': [universal_product_code],
-					'title': [title],
-					'price_including_tax': [price_including_tax],
-					'price_excluding_tax': [price_excluding_tax],
-					'number_available': [number_available],
-					'product_description': [product_description],
-					'category': [category],
-					'review_rating': [review_rating],
-					'image_url': [image_url]})
+								'universal_product_code(upc)': [universal_product_code],
+								'title': [title],
+								'price_including_tax': [price_including_tax],
+								'price_excluding_tax': [price_excluding_tax],
+								'number_available': [number_available],
+								'product_description': [product_description],
+								'category': [category],
+								'review_rating': [review_rating],
+								'image_url': [image_url]})
 	except NameError:
 		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide. Relancer le programme avec une URL valide.")
 	
