@@ -12,7 +12,7 @@ def set_the_url():
 	regex_ok = False
 	while regex_ok == False: #try to set the url
 		input_url = input("Veuillez saisir l'URL : ")
-		pattern = '^http://books[.]toscrape[.]com/'
+		pattern = '^https?://books[.]toscrape[.]com/'
 		result = re.match(pattern, input_url)
 		if result:		
 			the_url = input_url #a modifier
@@ -26,14 +26,15 @@ def scrap_one_book(url = ''):
 		the_url = set_the_url()
 	else:
 		the_url = url #a modifier
-		
+	
+	book_info = pd.DataFrame()
 	# set the response resquests
 	response = requests.get(the_url)
 	# if OK, scrap the page
 	if response.ok:
 		soup = BeautifulSoup(response.content, 'html.parser')
 		product_page_url = the_url
-		title = soup.h1.string	# scrap of title TODO expliqué diff
+		title = soup.h1.text
 		image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src']) # scrap of URL image			
 		category = soup.find('ul')('li')[2].text.strip() # scrap gategory			
 		all_p = soup.find_all('p') # find all paragraph			
@@ -52,6 +53,7 @@ def scrap_one_book(url = ''):
 		number_available_list = re.findall(r'\d', tds[5].text) #make a list of number
 		number_available = ''.join(number_available_list) #join the number
 		
+	
 	try:
 		book_info = pd.DataFrame({'product_page_url': [product_page_url],
 								'universal_product_code(upc)': [universal_product_code],
@@ -62,10 +64,11 @@ def scrap_one_book(url = ''):
 								'product_description': [product_description],
 								'category': [category],
 								'review_rating': [review_rating],
-								'image_url': [image_url]})
+								'image_url': [image_url]})								
+		
 	except NameError:
 		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide. Relancer le programme avec une URL valide.")
-	
+
 	return book_info
 
 if __name__ == '__main__':
