@@ -74,7 +74,8 @@ def scrap_one_book(url = ''):
 								'product_description': [product_description],
 								'category': [category],
 								'review_rating': [review_rating],
-								'image_url': ['=HYPERLINK("'+ slugify(title) +'.jpg"; "' + image_url + '")']
+								'image_url': ['=HYPERLINK("' + image_url + '")'],
+								'image_local': ['=HYPERLINK("' + slugify(title) +'.jpg")']
 								})								
 		
 	except NameError:
