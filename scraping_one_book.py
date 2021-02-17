@@ -64,7 +64,8 @@ def scrap_one_book(url = ''):
 		number_available = ''.join(number_available_list) #join the number
 
 	try:
-		book_info = pd.DataFrame({'product_page_url': [product_page_url],
+		book_info = pd.DataFrame({
+								'product_page_url': [product_page_url],
 								'universal_product_code(upc)': [universal_product_code],
 								'title': [title],
 								'price_including_tax': [price_including_tax],
@@ -73,7 +74,8 @@ def scrap_one_book(url = ''):
 								'product_description': [product_description],
 								'category': [category],
 								'review_rating': [review_rating],
-								'image_url': [image_url]})								
+								'image_url': ['=HYPERLINK("'+ slugify(title) +'.jpg"; "' + image_url + '")']
+								})								
 		
 	except NameError:
 		print("ERREUR : Le livre est introuvable, l'URL n'est pas valide. Relancer le programme avec une URL valide.")
