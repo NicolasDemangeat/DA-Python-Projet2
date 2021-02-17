@@ -29,5 +29,5 @@ links = scrap_the_site()
 for link in links:
     urls_category = scraping_one_category.scrap_one_category(link)
     category_name = scraping_one_book.download_image(urls_category)
-    scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = category_name + '/books_info.csv', sep=';', index=False)
+    scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
 

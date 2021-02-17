@@ -85,4 +85,4 @@ if __name__ == '__main__':
 	the_url = set_the_url()
 	url_list.append(the_url)
 	category_name = download_image(url_list)
-	scrap_one_book(the_url).to_csv(category_name + '/book_info.csv', sep=';', index=False)
+	scrap_one_book(the_url).to_csv(category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
