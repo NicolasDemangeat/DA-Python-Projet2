@@ -10,6 +10,9 @@ import scraping_one_category
 import pandas as pd
 
 def scrap_the_site():
+    """
+        this function return a list of all the ulr category in the site.
+    """
     link = 'http://books.toscrape.com/index.html'
 
     req = requests.get(link)
@@ -20,13 +23,11 @@ def scrap_the_site():
     for ul in uls:    
         link = ul['href']
         links.append('http://books.toscrape.com/' + link)
-    return links
+    return links # list of all url category
 
-df_result = []
 links = scrap_the_site()
 for link in links:
-    url_category = scraping_one_category.scrap_one_category(link)
-    df_result.append(scraping_one_category.scrap_all_books(url_category))
+    urls_category = scraping_one_category.scrap_one_category(link)
+    category_name = scraping_one_book.download_image(urls_category)
+    scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = category_name + '/books_info.csv', sep=';', index=False)
 
-result = pd.concat(df_result)
-result.to_csv(path_or_buf='all_books_info.csv', sep=';', index=False)

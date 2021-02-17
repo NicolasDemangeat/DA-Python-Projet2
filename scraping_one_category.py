@@ -8,28 +8,25 @@ import os.path
 import scraping_one_book
 import pandas as pd
 
-def find_next_page(url = ''):
+def find_next_page(url = ''):    
     url_all_pages_list = []
-    test_url = url.replace("index", "page-1")
+    test_url = url.replace("index", "page-1") # replace the end of the url by page-1
     reponse = requests.get(test_url)
-    if reponse.ok:
-        for i in range(1, 9):
+    if reponse.ok: # if page-1 exist
+        for i in range(1, 9): # try to access to all of the next pages
             url_page = url.replace("index", "page-" + str(i))
             reponse = requests.get(url_page)
             if reponse.ok:
-                url_all_pages_list.append(url_page)
+                url_all_pages_list.append(url_page) # put the url in the list
     else:
-        url_all_pages_list.append(url)
+        url_all_pages_list.append(url) # if page-1 doesn't exist, put the url in the list
 
     return url_all_pages_list
 
-def scrap_one_category(urls = ''): #scrap all the urls' books in the category
+def scrap_one_category(url = ''): #scrap all the urls' books in the category
     links = [] # list with all urls books in the page
-    if __name__ == '__main__':
-        url_category = scraping_one_book.set_the_url()
-        urls_next_pages_list = find_next_page(url_category)        
-    else:
-        urls_next_pages_list = find_next_page(urls)  # ulrs parameter
+
+    urls_next_pages_list = find_next_page(url)  # ulr parameter
 	
     for link in urls_next_pages_list:
         reponse = requests.get(link)
@@ -38,19 +35,15 @@ def scrap_one_category(urls = ''): #scrap all the urls' books in the category
         for one_title in all_title:
             a = one_title.find('a')
             link = a['href']
-            links.append(link)
-    return links #return a lists of urls
+            links.append(urllib.parse.urljoin("http://books.toscrape.com/catalogue/catalogue/catalogue/catalogue/", link))
+    
+    return links #return a list of all books' urls
 
 def scrap_all_books(links_of_books = []): #scrap all books in the page
-    if __name__ == '__main__':
-        links = scrap_one_category() #link = a lists of urls
-    else:
-        links = links_of_books
     df_list = []
     try:
-        for link in links:
-            url = urllib.parse.urljoin("http://books.toscrape.com/catalogue/catalogue/catalogue/catalogue/", link)
-            df_list.append(scraping_one_book.scrap_one_book(url))
+        for link in links_of_books:
+            df_list.append(scraping_one_book.scrap_one_book(link))
        
         df_all_books = pd.concat(df_list)
         return df_all_books
@@ -58,4 +51,7 @@ def scrap_all_books(links_of_books = []): #scrap all books in the page
         print("L'URL n'est pas correct, veuillez relancer le programme.")
 
 if __name__ == '__main__':
-    scrap_all_books().to_csv(path_or_buf='books_info.csv', sep=';', index=False)
+    the_url = scraping_one_book.set_the_url()
+    links_of_books = scrap_one_category(the_url)
+    category_name = scraping_one_book.download_image(links_of_books)
+    scrap_all_books(links_of_books).to_csv(path_or_buf = category_name + '/books_info.csv', sep=';', index=False)

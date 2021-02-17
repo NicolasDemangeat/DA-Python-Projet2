@@ -9,7 +9,7 @@ import pandas as pd
 import wget
 from slugify import slugify
 
-# set the url
+
 def set_the_url():
 	regex_ok = False
 	while regex_ok == False: #try to set the url
@@ -20,23 +20,32 @@ def set_the_url():
 			regex_ok = True
 			return input_url
 		else:
-			print("L'URL n'est pas valide.")	
+			print("L'URL n'est pas valide.")
 
-def scrap_one_book(url = ''):
-	if __name__ == '__main__':
-		the_url = set_the_url()
-	else:
-		the_url = url #a modifier
-	
+def download_image(the_url):
+	for link in the_url:
+		response = requests.get(link)
+		if response.ok:
+			soup = BeautifulSoup(response.content, 'html.parser')
+			title_slug = slugify(soup.h1.text)
+			image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src'])
+			category_slug = slugify(soup.find('ul')('li')[2].text.strip())
+			os.makedirs(category_slug, exist_ok=True)
+			wget.download(image_url, category_slug + "/" + title_slug + '.jpg', bar=None)
+
+	return category_slug
+
+
+def scrap_one_book(url = ''):	
 	book_info = pd.DataFrame()
 	# set the response resquests
-	response = requests.get(the_url)
+	response = requests.get(url)
 	# if OK, scrap the page
 	if response.ok:
 		soup = BeautifulSoup(response.content, 'html.parser')
-		product_page_url = the_url
+		product_page_url = url
 		title = soup.h1.text
-		image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src']) # scrap of URL image			
+		image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src']) # scrap of URL image
 		category = soup.find('ul')('li')[2].text.strip() # scrap gategory			
 		all_p = soup.find_all('p') # find all paragraph			
 		product_description = all_p[3].text #in all paragraph, p[3] is the description
@@ -53,11 +62,7 @@ def scrap_one_book(url = ''):
 		price_including_tax = tds[3].text
 		number_available_list = re.findall(r'\d', tds[5].text) #make a list of number
 		number_available = ''.join(number_available_list) #join the number
-		
-		title_slug = slugify(title)
-		wget.download(image_url, title_slug + '.jpg', bar=None)
-		
-	
+
 	try:
 		book_info = pd.DataFrame({'product_page_url': [product_page_url],
 								'universal_product_code(upc)': [universal_product_code],
@@ -76,4 +81,8 @@ def scrap_one_book(url = ''):
 	return book_info
 
 if __name__ == '__main__':
-	scrap_one_book().to_csv(path_or_buf='book_info.csv', sep=';', index=False)
+	url_list = []
+	the_url = set_the_url()
+	url_list.append(the_url)
+	category_name = download_image(url_list)
+	scrap_one_book(the_url).to_csv(category_name + '/book_info.csv', sep=';', index=False)
