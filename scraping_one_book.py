@@ -6,6 +6,8 @@ import csv
 import re
 import os.path
 import pandas as pd
+import wget
+from slugify import slugify
 
 # set the url
 def set_the_url():
@@ -15,9 +17,8 @@ def set_the_url():
 		pattern = '^https?://books[.]toscrape[.]com/'
 		result = re.match(pattern, input_url)
 		if result:		
-			the_url = input_url #a modifier
 			regex_ok = True
-			return the_url # return input_url
+			return input_url
 		else:
 			print("L'URL n'est pas valide.")	
 
@@ -53,6 +54,9 @@ def scrap_one_book(url = ''):
 		number_available_list = re.findall(r'\d', tds[5].text) #make a list of number
 		number_available = ''.join(number_available_list) #join the number
 		
+		title_slug = slugify(title)
+		wget.download(image_url, title_slug + '.jpg', bar=None)
+		
 	
 	try:
 		book_info = pd.DataFrame({'product_page_url': [product_page_url],
@@ -72,4 +76,4 @@ def scrap_one_book(url = ''):
 	return book_info
 
 if __name__ == '__main__':
-	scrap_one_book().to_csv(path_or_buf='book.csv', sep=';', index=False)
+	scrap_one_book().to_csv(path_or_buf='book_info.csv', sep=';', index=False)

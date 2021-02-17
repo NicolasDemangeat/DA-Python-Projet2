@@ -58,4 +58,4 @@ def scrap_all_books(links_of_books = []): #scrap all books in the page
         print("L'URL n'est pas correct, veuillez relancer le programme.")
 
 if __name__ == '__main__':
-    scrap_all_books().to_csv(path_or_buf='books.csv', sep=';', index=False)
+    scrap_all_books().to_csv(path_or_buf='books_info.csv', sep=';', index=False)

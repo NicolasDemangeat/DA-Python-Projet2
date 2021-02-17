@@ -29,4 +29,4 @@ for link in links:
     df_result.append(scraping_one_category.scrap_all_books(url_category))
 
 result = pd.concat(df_result)
-result.to_csv(path_or_buf='all_books.csv', sep=';', index=False)
+result.to_csv(path_or_buf='all_books_info.csv', sep=';', index=False)
