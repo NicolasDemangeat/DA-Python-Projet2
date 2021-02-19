@@ -8,7 +8,16 @@ import os.path
 import scraping_one_book
 import pandas as pd
 
-def find_next_page(url = ''):    
+
+def find_next_page(url = ''):
+    """
+        Extract:
+        Parameter: string, an URL category.
+        This function test if the url parameter have more than one page.
+        If more than one page, find all the pages and put in a list.
+        If just one page, put the URL in the list.
+        Return: a list of all URLs pages.
+    """
     url_all_pages_list = []
     test_url = url.replace("index", "page-1") # replace the end of the url by page-1
     reponse = requests.get(test_url)
@@ -19,32 +28,51 @@ def find_next_page(url = ''):
             if reponse.ok:
                 url_all_pages_list.append(url_page) # put the url in the list
     else:
-        url_all_pages_list.append(url) # if page-1 doesn't exist, put the url in the list
+        url_all_pages_list.append(url) # if page-1 doesn't exist, put the url parameter in the list
 
-    return url_all_pages_list
+    return url_all_pages_list 
 
-def scrap_one_category(url = ''): #scrap all the urls' books in the category
-    links = [] # list with all urls books in the page
-
+def scrap_one_category(url = ''):
+    """
+        Extract:
+        Parameter: string, an URL category.
+        This function call find_next_page to find all pages.
+        Then extract all of the books URLs in all pages and put them in a list.
+        Return: a list with all URLs books in the pages.
+    """
+    links = [] 
     urls_next_pages_list = find_next_page(url)  # ulr parameter
-	
     for link in urls_next_pages_list:
         reponse = requests.get(link)
-        soup = BeautifulSoup(reponse.content, 'html.parser')        
+        soup = BeautifulSoup(reponse.content, 'html.parser')
         all_title = soup.find_all('h3')
         for one_title in all_title:
             a = one_title.find('a')
             link = a['href']
             links.append(urllib.parse.urljoin("http://books.toscrape.com/catalogue/catalogue/catalogue/catalogue/", link))
-    
-    return links #return a list of all books' urls
 
-def scrap_all_books(links_of_books = []): #scrap all books in the page
+    return links # list with all URLs books in the pages
+
+def scrap_all_books(links_of_books = []):
+    """
+        This function is in two part:
+
+        Extract:
+        Parameter: a list of all the URLs books.
+        This part use scrap_one_book function from scraping_one_book.py,
+        and extract all infos of all books in the category.
+        Remember, the return of scrap_one_book is a DataFrame.
+        Then put them into a list.       
+    """
     df_list = []
     try:
         for link in links_of_books:
-            df_list.append(scraping_one_book.scrap_one_book(link))
-       
+            df_list.append(scraping_one_book.scrap_one_book(link))#put all DataFrame in a list
+        """    
+            Transform:
+            Use Pandas to concat all DataFrames produced before.
+            Return: a DataFrame of all books in a category.
+        """ 
         df_all_books = pd.concat(df_list)
         return df_all_books
     except:
@@ -54,4 +82,8 @@ if __name__ == '__main__':
     the_url = scraping_one_book.set_the_url()
     links_of_books = scrap_one_category(the_url)
     category_name = scraping_one_book.download_image(links_of_books)
-    scrap_all_books(links_of_books).to_csv(path_or_buf = category_name + '/books_info.csv', sep=';', index=False)
+    """
+        Load:
+        Push the DataFrame into a csv file.
+    """
+    scrap_all_books(links_of_books).to_csv(path_or_buf = category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
