@@ -65,13 +65,12 @@ def scrap_all_books(links_of_books = []):
         Then put them into a list.       
     """
     df_list = []
-
     try:
         for link in links_of_books:
-            df_list.append(scraping_one_book.scrap_one_book(link))
+            df_list.append(scraping_one_book.scrap_one_book(link))#put all DataFrame in a list
         """    
             Transform:
-            Use Pandas to make a DataFrame with all DataFrames produced before.
+            Use Pandas to concat all DataFrames produced before.
             Return: a DataFrame of all books in a category.
         """ 
         df_all_books = pd.concat(df_list)
