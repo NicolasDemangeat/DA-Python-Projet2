@@ -12,9 +12,9 @@ from progress.bar import Bar
 
 def scrap_the_site():
     """
-        Extract:
-        This function search for all links of all category on the website.
-        Return: list, of all URL category.
+    Extract:\n
+    This function search all links of all categories on the website.\n
+    :return: a list, of all URLs categories.
     """
     link = 'http://books.toscrape.com/index.html'
 
@@ -26,20 +26,20 @@ def scrap_the_site():
     for ul in uls:    
         link = ul['href']
         links.append('http://books.toscrape.com/' + link)
-    return links # list of all url category
+    return links    #list of all url category
 
 print("Début du programme.")
 links = scrap_the_site()
-bar = Bar('En cours : ', max=len(links)) #set the progress bar
+bar = Bar('En cours : ', max=len(links))    #set the progress bar
 for link in links:
     urls_category = scraping_one_category.scrap_one_category(link)
     category_name = scraping_one_book.download_image(urls_category)
     """
-        Load:
-        Push the DataFrame of one category into a csv at each lap of the loop.
+    Load:
+    Push the DataFrame of one category into a csv at each lap of the loop.
     """
     scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
-    bar.next()#progress the bar
+    bar.next()  #progress the bar
 bar.finish()
 print('Programme terminé sans erreur.')
 
