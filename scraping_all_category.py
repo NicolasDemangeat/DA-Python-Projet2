@@ -38,7 +38,7 @@ for link in links:
     Load:
     Push the DataFrame of one category into a csv at each lap of the loop.
     """
-    scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
+    scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
     bar.next()  #progress the bar
 bar.finish()
 print('Programme terminé sans erreur.')

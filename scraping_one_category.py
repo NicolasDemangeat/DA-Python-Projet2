@@ -51,7 +51,7 @@ def scrap_one_category(url = ''):
             link = a['href']
             links.append(urllib.parse.urljoin("http://books.toscrape.com/catalogue/catalogue/catalogue/catalogue/", link))
 
-    return links    #list with all URLs books in the pages
+    return links    #list with all URLs books in all the pages
 
 def scrap_all_books(links_of_books = []):
     """
@@ -85,4 +85,4 @@ if __name__ == '__main__':
     Load:
     Push the DataFrame into a csv file.
     """
-    scrap_all_books(links_of_books).to_csv(path_or_buf = category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
+    scrap_all_books(links_of_books).to_csv(path_or_buf = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")

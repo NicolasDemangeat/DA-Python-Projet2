@@ -40,8 +40,8 @@ def download_image(the_url):
 			title_slug = slugify(soup.h1.text)
 			image_url = urllib.parse.urljoin("http://books.toscrape.com/", soup.img['src'])
 			category_slug = slugify(soup.find('ul')('li')[2].text.strip())
-			os.makedirs(category_slug, exist_ok=True)	#creat a directory 
-			wget.download(image_url, category_slug + "/" + title_slug + '.jpg', bar=None)	#download the image
+			os.makedirs("Books-To-Scrape/" + category_slug, exist_ok=True)	#creat a directory 
+			wget.download(image_url, "Books-To-Scrape/" + category_slug + "/" + title_slug + '.jpg', bar = None)	#download the image
 
 	return category_slug
 
@@ -112,4 +112,4 @@ if __name__ == '__main__':
 	Load :
 	Push the DataFrame to a csv file.
 	"""
-	scrap_one_book(the_url).to_csv(category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
+	scrap_one_book(the_url).to_csv("Books-To-Scrape/" + category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
