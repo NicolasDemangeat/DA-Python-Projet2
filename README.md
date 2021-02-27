@@ -13,8 +13,8 @@ Application de scraping pour le site http://books.toscrape.com.
 6. [Auteur](#6-auteur)
 
 ## 1. Prérequis
-Pour pouvoir exécuter les scripts il nécessaire d'installer la dernière version de python : 
-https://www.python.org/downloads/
+Pour pouvoir exécuter les scripts il nécessaire d'installer la version 3.9.0 de python : 
+https://www.python.org/downloads/release/python-390/
 
 ## 2. Informations générales
   Ce repository contient trois scripts qui ont chacun un rôle différent.
