@@ -103,13 +103,14 @@ def scrap_one_book(url = ''):
 
 	return book_info
 
-if __name__ == '__main__':
+if __name__ == '__main__':	
 	url_list = []
 	the_url = set_the_url()
 	url_list.append(the_url) # put the url in a list because the function download_image need a list as parameter
 	category_name = download_image(url_list)
+	path = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv'
 	"""
 	Load :
 	Push the DataFrame to a csv file.
 	"""
-	scrap_one_book(the_url).to_csv("Books-To-Scrape/" + category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
+	scrap_one_book(the_url).to_csv(path, sep=';', index=False, encoding="utf-8-sig")

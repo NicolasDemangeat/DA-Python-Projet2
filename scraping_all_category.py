@@ -29,16 +29,17 @@ def scrap_the_site():
     return links    #list of all url category
 
 print("Début du programme.")
-links = scrap_the_site()
+links = scrap_the_site()    #get all URLs of categories
 bar = Bar('En cours : ', max=len(links))    #set the progress bar
 for link in links:
     urls_category = scraping_one_category.scrap_one_category(link)
     category_name = scraping_one_book.download_image(urls_category)
+    path = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv'
     """
     Load:
     Push the DataFrame of one category into a csv at each lap of the loop.
     """
-    scraping_one_category.scrap_all_books(urls_category).to_csv(path_or_buf = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
+    scraping_one_category.scrap_all_books(urls_category).to_csv(path, sep=';', index=False, encoding="utf-8-sig")
     bar.next()  #progress the bar
 bar.finish()
 print('Programme terminé sans erreur.')

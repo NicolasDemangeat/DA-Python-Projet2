@@ -81,8 +81,9 @@ if __name__ == '__main__':
     the_url = scraping_one_book.set_the_url()
     links_of_books = scrap_one_category(the_url)
     category_name = scraping_one_book.download_image(links_of_books)
+    path = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv'
     """
     Load:
     Push the DataFrame into a csv file.
     """
-    scrap_all_books(links_of_books).to_csv(path_or_buf = "Books-To-Scrape/" + category_name + '/' + category_name + '.csv', sep=';', index=False, encoding="utf-8-sig")
+    scrap_all_books(links_of_books).to_csv(path, sep=';', index=False, encoding="utf-8-sig")
