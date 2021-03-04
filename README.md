@@ -82,8 +82,8 @@ Par exemple, après avoir exécuter ```$ python scraping_one_book.py```, un doss
 Le dossier "Books-To-Scrape" se décompose comme suit :
 - Dossier : "Books-To-Scrape"
    - Dossier : "Nom-de-la-catégorie-du-livre"
-      - Fichier : Image de couverture du livre
-      - Fichier : "Nom-de-la-catégorie-du-livre" .csv
+      - Fichier : Image de couverture du/des livre(s)
+      - Fichier : "Nom-de-la-catégorie-du-livre".csv
 
 Le formatage du résultat reste le même pour chaque script. 
 
